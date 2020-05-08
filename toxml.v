@@ -13,10 +13,29 @@ pub fn new() &Toxml {
 	return x
 }
 
+fn escape_key(s string) string {
+	// TODO : Throw an error if the key is not valid
+	s = s.replace('=', '')
+	s = s.replace('"', '')
+	s = s.replace('<', '')
+	s = s.replace('>', '')
+	return s
+}
+
+fn escape_string(s string) string {
+	s = s.replace('"', '\\"')
+	s = s.replace('<', '&lt;')
+	s = s.replace('>', '&gt;')
+	// TODO : Do proper char escaping
+	return s
+}
+
 fn attributes(kvs map[string]string) string {
 	mut a := ''
 	for k,v in kvs {
-		a += ' $k="$v"'
+		ek := escape_key(k)
+		ev := escape_string(v)
+		a += ' $ek="$ev"'
 	}
 	return a
 }
