@@ -6,7 +6,7 @@ mut:
 	stack []string
 }
 
-fn toxml_new() &Toxml {
+pub fn toxml_new() &Toxml {
 	x := &Toxml{}
 	x.s = ''
 	x.stack = []
@@ -29,24 +29,24 @@ fn xmlstr(s string) string {
 	return ''
 }
 
-fn (x &Toxml)body(msg string) {
+pub fn (x &Toxml)body(msg string) {
 	x.s += '$msg\n'
 }
 
-fn (x &Toxml)openclose(tag string, kvs map[string]string) {
+pub fn (x &Toxml)openclose(tag string, kvs map[string]string) {
 	x.llopen(tag, kvs, '/')
 }
 
-fn (x &Toxml)prolog(tag string, kvs map[string]string) {
+pub fn (x &Toxml)prolog(tag string, kvs map[string]string) {
 	x.llopen('?' + tag, kvs, '?')
 }
 
-fn (x &Toxml)comment(tag string) {
+pub fn (x &Toxml)comment(tag string) {
 	nokv := map[string]string{}
 	x.llopen('!--', nokv, '--')
 }
 
-fn (x &Toxml)open(tag string, kvs map[string]string) {
+pub fn (x &Toxml)open(tag string, kvs map[string]string) {
 	x.llopen(tag, kvs, '')
 	x.stack.push(tag)
 }
@@ -64,7 +64,7 @@ fn (x &Toxml)pop() string {
 	return tag
 }
 
-fn (x &Toxml)close() {
+pub fn (x &Toxml)close() {
 	tag := x.pop()
 	instr := x.indent()
 	x.s += '$instr</$tag>\n'
@@ -76,7 +76,7 @@ fn (x &Toxml)finish() {
 	}
 }
 
-fn (x &Toxml)str() string {
+pub fn (x &Toxml)str() string {
 	x.finish()
 	return x.s
 }
