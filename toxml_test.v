@@ -1,7 +1,7 @@
 module toxml
 
 fn toxml_test() {
-	x := toxml_new()
+	x := toxml.new()
 	x.comment('hello world')
 	x.finish()
 	println(x.str())

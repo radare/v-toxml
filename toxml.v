@@ -6,7 +6,7 @@ mut:
 	stack []string
 }
 
-pub fn toxml_new() &Toxml {
+pub fn new() &Toxml {
 	x := &Toxml{}
 	x.s = ''
 	x.stack = []
