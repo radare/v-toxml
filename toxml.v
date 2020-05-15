@@ -15,19 +15,19 @@ pub fn new() &Toxml {
 
 fn escape_key(s string) string {
 	// TODO : Throw an error if the key is not valid
-	s = s.replace('=', '')
-	s = s.replace('"', '')
-	s = s.replace('<', '')
-	s = s.replace('>', '')
-	return s
+	mut r := s.replace('=', '')
+	r = r.replace('"', '')
+	r = r.replace('<', '')
+	r = r.replace('>', '')
+	return r
 }
 
 fn escape_string(s string) string {
-	s = s.replace('"', '\\"')
-	s = s.replace('<', '&lt;')
-	s = s.replace('>', '&gt;')
+	mut r := s.replace('"', '\\"')
+	r = r.replace('<', '&lt;')
+	r = r.replace('>', '&gt;')
 	// TODO : Do proper char escaping
-	return s
+	return r
 }
 
 fn attributes(kvs map[string]string) string {
