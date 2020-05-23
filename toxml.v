@@ -7,10 +7,10 @@ mut:
 }
 
 pub fn new() &Toxml {
-	x := &Toxml{}
-	x.s = ''
-	x.stack = []
-	return x
+	return &Toxml{
+		s: ''
+		stack: []
+	}
 }
 
 fn escape_key(s string) string {
