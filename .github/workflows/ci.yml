@@ -29,5 +29,5 @@ jobs:
       run: |
         export PATH="/tmp/v:$PATH"
         pwd
-        v test .
+        v -stats test .
 
