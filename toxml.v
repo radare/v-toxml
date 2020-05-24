@@ -26,6 +26,9 @@ fn escape_string(s string) string {
 	mut r := s.replace('"', '\\"')
 	r = r.replace('<', '&lt;')
 	r = r.replace('>', '&gt;')
+	r = r.replace('\\', '&bsol;')
+	r = r.replace('"', '&quot;')
+	r = r.replace('\n', '')
 	// TODO : Do proper char escaping
 	return r
 }
@@ -48,44 +51,67 @@ fn xmlstr(s string) string {
 	return ''
 }
 
-pub fn (x &Toxml)body(msg string) {
-	x.s += '$msg\n'
+pub fn (x &Toxml)body(msg string) bool {
+	if x.stack.len > 0 {
+		x.s += '$msg\n'
+		return true
+	}
+	return false
 }
 
-pub fn (x &Toxml)openclose(tag string, kvs map[string]string) {
-	x.llopen(tag, kvs, '/', '')
+pub fn (x &Toxml)openclose(tag string, kvs map[string]string) bool {
+	return x.llopen(tag, kvs, '/', '')
 }
 
-pub fn (x &Toxml)prolog(tag string, kvs map[string]string) {
-	x.llopen('?' + tag, kvs, '?', '')
+pub fn (x &Toxml)prolog(tag string, kvs map[string]string) bool {
+	return x.llopen('?' + tag, kvs, '?', '')
 }
 
 pub fn (x &Toxml)comment(tag string) {
 	x.llopen('!-- ', map[string]string{}, ' --', tag)
 }
 
-pub fn (x &Toxml)open(tag string, kvs map[string]string) {
-	x.llopen(tag, kvs, '', '')
-	x.stack.push(tag)
+fn valid(s string) bool {
+	return s != ''
 }
 
-fn (x &Toxml)llopen(tag string, kvs map[string]string, ch string, str string) {
+pub fn (x &Toxml)open(tag string, kvs map[string]string) bool {
+	if !valid(tag) {
+		return false
+	}
+	r := x.llopen(tag, kvs, '', '')
+	x.stack.push(tag)
+	return r
+}
+
+fn (x &Toxml)llopen(tag string, kvs map[string]string, ch string, str string) bool {
+	if !valid(tag) {
+		return false
+	}
 	attrs := attributes(kvs)
 	instr := x.indent()
 	x.s += '$instr<$tag$str$attrs$ch>\n'
+	return true
 }
 
 fn (x &Toxml)pop() string {
 	// return *&string(x.stack.pop())
+	if x.stack.len == 0 {
+		return ''
+	}
 	tag := x.stack.last()
 	x.stack.delete(x.stack.len - 1)
 	return tag
 }
 
-pub fn (x &Toxml)close() {
+pub fn (x &Toxml)close() bool {
 	tag := x.pop()
+	if !valid(tag) {
+		return false
+	}
 	instr := x.indent()
 	x.s += '$instr</$tag>\n'
+	return true
 }
 
 pub fn (x &Toxml)finish() {
