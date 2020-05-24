@@ -1,6 +1,6 @@
 module toxml
 
-pub fn test_toxml_stack() {
+fn test_toxml_stack() {
 	x := toxml.new()
 	assert(!x.open('',{'':''}))
 	assert(!x.body('body'))
@@ -9,7 +9,7 @@ pub fn test_toxml_stack() {
 	assert(x.str() == '')
 }
 
-pub fn test_toxml_comment() {
+fn test_toxml_comment() {
 	x := toxml.new()
 	x.comment('hello world')
 	x.finish()
