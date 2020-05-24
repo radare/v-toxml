@@ -89,7 +89,7 @@ pub fn (x &Toxml)close() {
 	x.s += '$instr</$tag>\n'
 }
 
-fn (x &Toxml)finish() {
+pub fn (x &Toxml)finish() {
 	for x.stack.len > 0 {
 		x.close()
 	}
