@@ -79,7 +79,7 @@ fn (x &Toxml)llopen(tag string, kvs map[string]string, ch string) {
 fn (x &Toxml)pop() string {
 	// return *&string(x.stack.pop())
 	tag := x.stack.last()
- 	x.stack.delete(x.stack.len - 1)
+	x.stack.delete(x.stack.len - 1)
 	return tag
 }
 
