@@ -53,27 +53,26 @@ pub fn (x &Toxml)body(msg string) {
 }
 
 pub fn (x &Toxml)openclose(tag string, kvs map[string]string) {
-	x.llopen(tag, kvs, '/')
+	x.llopen(tag, kvs, '/', '')
 }
 
 pub fn (x &Toxml)prolog(tag string, kvs map[string]string) {
-	x.llopen('?' + tag, kvs, '?')
+	x.llopen('?' + tag, kvs, '?', '')
 }
 
 pub fn (x &Toxml)comment(tag string) {
-	nokv := map[string]string{}
-	x.llopen('!--', nokv, '--')
+	x.llopen('!-- ', map[string]string{}, ' --', tag)
 }
 
 pub fn (x &Toxml)open(tag string, kvs map[string]string) {
-	x.llopen(tag, kvs, '')
+	x.llopen(tag, kvs, '', '')
 	x.stack.push(tag)
 }
 
-fn (x &Toxml)llopen(tag string, kvs map[string]string, ch string) {
+fn (x &Toxml)llopen(tag string, kvs map[string]string, ch string, str string) {
 	attrs := attributes(kvs)
 	instr := x.indent()
-	x.s += '$instr<$tag$attrs$ch>\n'
+	x.s += '$instr<$tag$str$attrs$ch>\n'
 }
 
 fn (x &Toxml)pop() string {
