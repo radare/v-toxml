@@ -1,6 +1,8 @@
 XML Serialization library for V
 ===============================
 
+![CI](https://github.com/radare/v-toxml/workflows/CI/badge.svg)
+
 Usage example: 
 
 ```go
