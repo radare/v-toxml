@@ -1,14 +1,16 @@
 module toxml
 
+import strings
+
 struct Toxml {
 mut:
-	s string
+	sb strings.Builder
 	stack []string
 }
 
 pub fn new() &Toxml {
 	return &Toxml{
-		s: ''
+		sb: strings.Builder{}
 		stack: []
 	}
 }
@@ -53,7 +55,7 @@ fn xmlstr(s string) string {
 
 pub fn (x &Toxml)body(msg string) bool {
 	if x.stack.len > 0 {
-		x.s += '$msg\n'
+		x.sb.write('$msg\n')
 		return true
 	}
 	return false
@@ -90,7 +92,7 @@ fn (x &Toxml)llopen(tag string, kvs map[string]string, ch string, str string) bo
 	}
 	attrs := attributes(kvs)
 	instr := x.indent()
-	x.s += '$instr<$tag$str$attrs$ch>\n'
+	x.sb.write('$instr<$tag$str$attrs$ch>\n')
 	return true
 }
 
@@ -110,7 +112,7 @@ pub fn (x &Toxml)close() bool {
 		return false
 	}
 	instr := x.indent()
-	x.s += '$instr</$tag>\n'
+	x.sb.write('$instr</$tag>\n')
 	return true
 }
 
@@ -122,5 +124,5 @@ pub fn (x &Toxml)finish() {
 
 pub fn (x &Toxml)str() string {
 	x.finish()
-	return x.s
+	return x.sb.str()
 }
