@@ -82,7 +82,7 @@ pub fn (x &Toxml)open(tag string, kvs map[string]string) bool {
 		return false
 	}
 	r := x.llopen(tag, kvs, '', '')
-	x.stack.push(tag)
+	x.stack << tag
 	return r
 }
 
