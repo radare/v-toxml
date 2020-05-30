@@ -1,5 +1,18 @@
 module toxml
 
+fn test_toxml_special() {
+	x := toxml.new()
+	assert(x.open('node',{
+		'fo<o"b>ar':'fo<o"b>ar'})
+	)
+	assert(x.body('fo<o"b>ar'))
+	assert(x.close())
+	x.finish()
+	expect := '<node foobar="fo&amp;lt;o&amp;bsol;&quot;b&amp;gt;ar">\nfo&amp;lt;o&amp;bsol;&quot;b&amp;gt;ar\n</node>\n'
+	s := x.str()
+	assert(s == expect)
+}
+
 fn test_toxml_stack() {
 	x := toxml.new()
 	assert(!x.open('',{'':''}))

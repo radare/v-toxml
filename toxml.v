@@ -24,14 +24,19 @@ fn escape_key(s string) string {
 	return r
 }
 
-fn escape_string(s string) string {
+fn escape_value(s string) string {
+	return escape_html(s)
+}
+
+fn escape_html(s string) string {
 	mut r := s.replace('"', '\\"')
 	r = r.replace('<', '&lt;')
 	r = r.replace('>', '&gt;')
 	r = r.replace('\\', '&bsol;')
-	r = r.replace('"', '&quot;')
-	r = r.replace('\n', '')
-	// TODO : Do proper char escaping
+	// r = r.replace('\n', '')
+	r = r.replace('&', '&amp;')
+        r = r.replace('"', '&quot;')
+        r = r.replace("'", '&apos;')
 	return r
 }
 
@@ -39,7 +44,7 @@ fn attributes(kvs map[string]string) string {
 	mut a := ''
 	for k,v in kvs {
 		ek := escape_key(k)
-		ev := escape_string(v)
+		ev := escape_value(v)
 		a += ' $ek="$ev"'
 	}
 	return a
@@ -49,13 +54,10 @@ fn (x &Toxml)indent() string {
 	return '  '.repeat(x.stack.len)
 }
 
-fn xmlstr(s string) string {
-	return ''
-}
-
 pub fn (x &Toxml)body(msg string) bool {
 	if x.stack.len > 0 {
-		x.sb.write('$msg\n')
+		e := escape_html(msg)
+		x.sb.write('$e\n')
 		return true
 	}
 	return false
