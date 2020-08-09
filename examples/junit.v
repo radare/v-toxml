@@ -2,7 +2,7 @@
 import toxml
 
 fn main() {
-	x := toxml.new()
+	mut x := toxml.new()
 	x.prolog('xml', {
 		'version': '1.0'
 		'encoding': 'UTF-8'

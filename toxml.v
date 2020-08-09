@@ -8,9 +8,9 @@ mut:
 	stack []string
 }
 
-pub fn new() &Toxml {
-	return &Toxml{
-		sb: strings.Builder{}
+pub fn new() Toxml {
+	return Toxml {
+		sb: strings.new_builder(0)
 		stack: []
 	}
 }
@@ -54,7 +54,7 @@ fn (x &Toxml)indent() string {
 	return '  '.repeat(x.stack.len)
 }
 
-pub fn (x &Toxml)body(msg string) bool {
+pub fn (mut x Toxml)body(msg string) bool {
 	if x.stack.len > 0 {
 		e := escape_html(msg)
 		x.sb.write('$e\n')
@@ -63,15 +63,15 @@ pub fn (x &Toxml)body(msg string) bool {
 	return false
 }
 
-pub fn (x &Toxml)openclose(tag string, kvs map[string]string) bool {
+pub fn (mut x Toxml)openclose(tag string, kvs map[string]string) bool {
 	return x.llopen(tag, kvs, '/', '')
 }
 
-pub fn (x &Toxml)prolog(tag string, kvs map[string]string) bool {
+pub fn (mut x Toxml)prolog(tag string, kvs map[string]string) bool {
 	return x.llopen('?' + tag, kvs, '?', '')
 }
 
-pub fn (x &Toxml)comment(tag string) {
+pub fn (mut x Toxml)comment(tag string) {
 	x.llopen('!-- ', map[string]string{}, ' --', tag)
 }
 
@@ -79,7 +79,7 @@ fn valid(s string) bool {
 	return s != ''
 }
 
-pub fn (x &Toxml)open(tag string, kvs map[string]string) bool {
+pub fn (mut x Toxml)open(tag string, kvs map[string]string) bool {
 	if !valid(tag) {
 		return false
 	}
@@ -88,7 +88,7 @@ pub fn (x &Toxml)open(tag string, kvs map[string]string) bool {
 	return r
 }
 
-fn (x &Toxml)llopen(tag string, kvs map[string]string, ch string, str string) bool {
+fn (mut x Toxml)llopen(tag string, kvs map[string]string, ch string, str string) bool {
 	if !valid(tag) {
 		return false
 	}
@@ -98,7 +98,7 @@ fn (x &Toxml)llopen(tag string, kvs map[string]string, ch string, str string) bo
 	return true
 }
 
-fn (x &Toxml)pop() string {
+fn (mut x Toxml)pop() string {
 	// return *&string(x.stack.pop())
 	if x.stack.len == 0 {
 		return ''
@@ -108,7 +108,7 @@ fn (x &Toxml)pop() string {
 	return tag
 }
 
-pub fn (x &Toxml)close() bool {
+pub fn (mut x Toxml)close() bool {
 	tag := x.pop()
 	if !valid(tag) {
 		return false
@@ -118,13 +118,13 @@ pub fn (x &Toxml)close() bool {
 	return true
 }
 
-pub fn (x &Toxml)finish() {
+pub fn (mut x Toxml)finish() {
 	for x.stack.len > 0 {
 		x.close()
 	}
 }
 
-pub fn (x &Toxml)str() string {
+pub fn (mut x Toxml)str() string {
 	x.finish()
 	return x.sb.str()
 }

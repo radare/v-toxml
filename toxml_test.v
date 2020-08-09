@@ -1,7 +1,7 @@
 module toxml
 
 fn test_toxml_special() {
-	x := toxml.new()
+	mut x := toxml.new()
 	assert(x.open('node',{
 		'fo<o"b>ar':'fo<o"b>ar'})
 	)
@@ -14,7 +14,7 @@ fn test_toxml_special() {
 }
 
 fn test_toxml_stack() {
-	x := toxml.new()
+	mut x := toxml.new()
 	assert(!x.open('',{'':''}))
 	assert(!x.body('body'))
 	assert(!x.close())
@@ -23,7 +23,7 @@ fn test_toxml_stack() {
 }
 
 fn test_toxml_comment() {
-	x := toxml.new()
+	mut x := toxml.new()
 	x.comment('hello world')
 	x.finish()
 	expect := '<!-- hello world -->'
@@ -31,7 +31,7 @@ fn test_toxml_comment() {
 }
 
 fn test_toxml_nest() {
-	x := toxml.new()
+	mut x := toxml.new()
 	x.prolog('xml', {
 		'version': '1.0'
 		'encoding': 'UTF-8'
