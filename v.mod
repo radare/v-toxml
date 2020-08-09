@@ -1,7 +1,7 @@
 Module {
 	name: 'toxml'
 	author: 'pancake'
-	version: '0.3.0'
+	version: '0.3.1'
 	repo_url: 'https://github.com/radare/v-toxml'
 	vcs: 'git'
 	tags: ['xml', 'serialization']
