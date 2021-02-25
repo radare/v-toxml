@@ -57,7 +57,7 @@ fn (x &Toxml)indent() string {
 pub fn (mut x Toxml)body(msg string) bool {
 	if x.stack.len > 0 {
 		e := escape_html(msg)
-		x.sb.write('$e\n')
+		x.sb.write_string('$e\n')
 		return true
 	}
 	return false
@@ -94,7 +94,7 @@ fn (mut x Toxml)llopen(tag string, kvs map[string]string, ch string, str string)
 	}
 	attrs := attributes(kvs)
 	instr := x.indent()
-	x.sb.write('$instr<$tag$str$attrs$ch>\n')
+	x.sb.write_string('$instr<$tag$str$attrs$ch>\n')
 	return true
 }
 
@@ -114,7 +114,7 @@ pub fn (mut x Toxml)close() bool {
 		return false
 	}
 	instr := x.indent()
-	x.sb.write('$instr</$tag>\n')
+	x.sb.write_string('$instr</$tag>\n')
 	return true
 }
 
